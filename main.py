@@ -23,7 +23,6 @@ for row in list1:
     df1[row]=df1[row].str[1:19]
 #print(list(map(lambda x:df1[x].str[1:19],list1)))
 
-
-
-print(df1.head())
+df1=df1.drop_duplicates(subset=list1,ignore_index=True)
+print(df1)
 #print(df1.info())
