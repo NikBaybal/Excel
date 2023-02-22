@@ -8,10 +8,10 @@ import datetime
 # -заполнить даныыми исходную таблицу
 
 
-cwd = os.getcwd()  # Retrieve current working directory (`cwd`)
-os.chdir("/content")  # Change directory
-os.listdir('.')  # List all files and directories in current directory
-file = '20230215 Данные ГТУ1.xlsx'
+cwd = os.getcwd()                                                               # Retrieve current working directory (`cwd`)
+os.chdir("C:/Users/nikip/PycharmProjects/data processing")                      # Change directory
+os.listdir('.')                                                                 # List all files and directories in current directory
+file = 'ГТУ3.xlsx'
 xl = pd.ExcelFile(file)
 df_in = xl.parse('Лист1')
 
@@ -42,15 +42,10 @@ def data_clean(df_in):
 
 df_out = data_clean(df_in)
 
-# print(df_out)
+print(df_out)
 # print(df_out.info())
-print(pd.date_range(df_out['time'][0], df_out["time"][20], freq="D"))
+#print(pd.date_range(df_out['time'][0], df_out["time"][20], freq="D"))
 # print(df)
 
 
-pd.date_range(calendar["checkin_date"][0], calendar["checkout_date"][0])
-# вывод
-DatetimeIndex(['2022-06-01', '2022-06-02', '2022-06-03',
-               '2022-06-04', '2022-06-05', '2022-06-06',
-               '2022-06-07'],
-              dtype='datetime64[ns]', freq='D')
+
