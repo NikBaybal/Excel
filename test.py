@@ -19,9 +19,22 @@ file = 'ГТУ3.xlsx'
 xl = pd.ExcelFile(file)
 df_in = xl.parse('Лист1')
 time = df_in.columns[0]
-power = df_in.columns[1]
-freq = df_in.columns[2]
-num_min=datetime.timedelta(minutes=5)                                           # количество минут
-diff = datetime.timedelta(hours=9)                                              # разница во времени
+diff = datetime.timedelta(hours=9)
+def data_clean(df_in):
+    time = df_in.columns[0]
+    power = df_in.columns[1]
+    freq = df_in.columns[2]
+    df_obr = df_in[[time, freq, power]]
+    df_obr[time] = pd.to_datetime(df_obr[time]).round('S')
+    df_obr[time] = df_obr[time] - diff
+    df_obr[freq], df_obr[power] = df_obr[freq].round(3), df_obr[power].round(2)
+    df_obr = df_obr.drop_duplicates(subset=time, ignore_index=True)
+    df_out = pd.DataFrame(pd.date_range(df_in[time][0] - diff, df_in[time].iloc[-1] - diff, freq="S"), columns=[time])
+    df_out = df_out.merge(df_obr, how='left').fillna(method='pad')
+    df_out[time] = df_out[time].dt.strftime('%Y.%m.%d %H:%M:%S')
 
-print(df_in[time][len(df_in[time])-1])
+    return df_out
+
+
+
+
