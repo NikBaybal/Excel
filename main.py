@@ -4,7 +4,7 @@ import openpyxl
 import datetime
 
 # Алгоритм обработки данных
-#- привести все строки со временем к формату времени
+#- привести все строки со временем к формату времени (ошибается если формат времени другой как в данных СШ110кВ)
 #- убрать дубликаты
 #- привести к UTC
 #- создать новый столбец с временем без пропусков
@@ -24,9 +24,8 @@ def data_clean(df_in):
     time = df_in.columns[0]
     power = df_in.columns[1]
     freq = df_in.columns[2]
-    df_in[time] = pd.to_datetime(df_in[time]).round('S')
+    df_in[time] = pd.to_datetime(df_in[time]).round('S')                                    #ошибается если формат времени другой как в данных СШ110кВ)
     df_obr = df_in[[time, freq, power]]
-
     df_obr[time] = df_obr[time] - diff
     df_obr[freq], df_obr[power] = df_obr[freq].map('{:.3f}'.format), df_obr[power].map('{:.2f}'.format)
     df_obr = df_obr.drop_duplicates(subset=time, ignore_index=True)
