@@ -3,6 +3,7 @@ import pandas as pd
 import openpyxl
 import datetime
 
+
 # Алгоритм обработки данных
 #- привести все строки со временем к формату времени
 #- убрать дубликаты
@@ -23,12 +24,13 @@ diff = datetime.timedelta(hours=9)                                              
 def data_clean(df_in,num):
     time = df_in.columns[num]
     freq = df_in.columns[num+1]
-    df_obr = df_in[[time, freq]]
-    #df_obr[time] = pd.to_datetime(df_obr[time]).round('S')
+    df_in = df_in.dropna(subset=[time])
+    df_in[time] = pd.to_datetime(df_in[time]).round('S')
+    df_obr = df_in.loc[:,[time, freq]]
     df_obr[time] = df_obr[time] - diff
     df_obr[freq] = df_obr[freq].map('{:.3f}'.format)
     df_obr = df_obr.drop_duplicates(subset=time, ignore_index=True)
-    df_out = pd.DataFrame(pd.date_range(df_obr[time][0] - diff, df_obr[time].iloc[-1] - diff, freq="S"), columns=[time])
+    df_out = pd.DataFrame(pd.date_range(df_in[time][0].round('min') - diff, df_in[time][len(df_in[time])-1].round('min') - diff, freq="S"), columns=[time])
     df_out = df_out.merge(df_obr, how='left').fillna(method='pad')
     begin_data = df_out[time][0].strftime('%Y%m%d')
     begin_time = df_out[time][0].strftime('%H%M%S')

@@ -24,8 +24,9 @@ def data_clean(df_in):
     time = df_in.columns[0]
     power = df_in.columns[1]
     freq = df_in.columns[2]
+    df_in[time] = pd.to_datetime(df_in[time]).round('S')
     df_obr = df_in[[time, freq, power]]
-    df_obr[time] = pd.to_datetime(df_obr[time]).round('S')
+
     df_obr[time] = df_obr[time] - diff
     df_obr[freq], df_obr[power] = df_obr[freq].map('{:.3f}'.format), df_obr[power].map('{:.2f}'.format)
     df_obr = df_obr.drop_duplicates(subset=time, ignore_index=True)
